@@ -3,20 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>随机图片api</title>
+<title>随机图片</title>
 <style>
+    body {
+        background-color: rgb(249, 201, 201);
+        color: #27283e;
+    }
     #random-image {
         max-width: 100%;
         height: auto;
     }
     button {
-        background-color: rgb(92, 92, 92);
+        background-color: rgb(83, 174, 200);
         color: #fffefe;
+        border: none;
+        font-size: 16px;
+        padding: 3px 10px;
     }
     img {
         border-radius: 15px;
-        max-width: 400px;
-        max-height: 400px;
+        width: 400px;
         margin-left: 20px;
         margin-right: 20px;
     }
@@ -27,7 +33,7 @@
 </head>
 <body>
 <button onclick="refreshPage()">刷新</button>
-<h2>使用Unsplash的随机图片API</h2>
+<h2>Unsplash随机图片API</h2>
 <img id="random-image" src="" alt="等待加载图片...">
 <script>
     // 使用 Unsplash 的随机图片 API
