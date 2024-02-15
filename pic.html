@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>api图像接口 | 随机图片</title>
+<style>
+    #random-image {
+        max-width: 100%;
+        height: auto;
+    }
+    button {
+        background-color: rgb(92, 92, 92);
+        color: #fffefe;
+    }
+    img {
+        border-radius: 15px;
+        max-width: 400px;
+        max-height: 400px;
+        margin-left: 120px;
+    }
+    h2 {
+        margin-left: 20px;
+    }
+</style>
+</head>
+<body>
+<button onclick="refreshPage()">刷新</button>
+<h2>使用Unsplash的随机图片API</h2>
+<img id="random-image" src="" alt="等待加载图片...">
+<script>
+    // 使用 Unsplash 的随机图片 API
+    var apiUrl = "https://source.unsplash.com/random";
+
+    // 更新图片元素的 src 属性，显示随机图片
+    document.getElementById("random-image").src = apiUrl;
+
+    // 刷新页面函数
+    function refreshPage() {
+        location.reload();
+    }
+</script>
+</body>
+</html>
