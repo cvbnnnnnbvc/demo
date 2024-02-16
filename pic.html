@@ -26,12 +26,18 @@
             border: none;
             font-size: 16px;
             padding: 3px 10px;
+            border-radius: 10px;
+            box-shadow: 5px 5px 8px 0px rgba(0, 0, 0, 0.4); 
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: rgb(48, 126, 171);
         }
     </style>
 </head>
 <body>
     <button onclick="refreshPage()">刷新图片</button>
-    <h2>采用Unsplash的图片API</h2>
+    <h2>采用Unsplash图片API</h2>
     <h4>生成的随机图片:</h4>
     <img id="randomImage" src="" alt="加载中..">
     <br>
