@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>随机图片</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <style>
         /* 样式可根据需要进行修改 */
         body {
@@ -20,17 +21,17 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         button {
-        background-color: rgb(83, 174, 200);
-        color: #fffefe;
-        border: none;
-        font-size: 16px;
-        padding: 3px 10px;
-    }
+            background-color: rgb(83, 174, 200);
+            color: #fffefe;
+            border: none;
+            font-size: 16px;
+            padding: 3px 10px;
+        }
     </style>
 </head>
 <body>
     <button onclick="refreshPage()">刷新图片</button>
-    <h2>采用Unsplash图片API</h2>
+    <h2>采用Unsplash的图片API</h2>
     <h4>生成的随机图片:</h4>
     <img id="randomImage" src="" alt="加载中..">
     <br>
