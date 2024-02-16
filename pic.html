@@ -1,51 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>随机图片生成器</title>
-<style>
-    body {
-        background-color: rgb(249, 201, 201);
-        color: #27283e;
-    }
-    #random-image {
-        max-width: 100%;
-        height: auto;
-    }
-    button {
+    <title>随机图片</title>
+    <style>
+        /* 样式可根据需要进行修改 */
+        body {
+            text-align: center;
+            margin-top: 50px;
+            font-family: Arial, sans-serif;
+            background-color: rgb(249, 201, 201);
+            color: #27283e;
+        }
+        img {
+            max-width: 50%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        button {
         background-color: rgb(83, 174, 200);
         color: #fffefe;
         border: none;
         font-size: 16px;
         padding: 3px 10px;
     }
-    img {
-        border-radius: 15px;
-        width: 50%;
-        margin-left: 50px;
-    }
-    h2, h4 {
-        margin-left: 50px;
-    }
-</style>
+    </style>
 </head>
 <body>
-<button onclick="refreshPage()">刷新</button>
-<h2>采用Unsplash图片API</h2>
-<h4>生成的随机图片:</h4>
-<img id="random-image" src="" alt="等待加载图片...">
-<script>
-    // 使用 Unsplash 的随机图片 API
-    var apiUrl = "https://source.unsplash.com/random";
-
-    // 更新图片元素的 src 属性，显示随机图片
-    document.getElementById("random-image").src = apiUrl;
-
-    // 刷新页面函数
-    function refreshPage() {
-        location.reload();
-    }
-</script>
+    <button onclick="refreshPage()">刷新图片</button>
+    <h2>采用Unsplash图片API</h2>
+    <h4>生成的随机图片:</h4>
+    <img id="randomImage" src="" alt="加载中..">
+    <br>
+    <script>
+        function refreshPage() {
+            // 刷新当前页面
+            location.reload();
+        }
+        // 使用 Unsplash API 获取随机图片
+        fetch('https://source.unsplash.com/random')
+            .then(response => {
+                // 检查响应是否成功
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // 返回响应的URL
+                return response.url;
+            })
+            .then(randomImageURL => {
+                // 更新图片的src属性
+                document.getElementById("randomImage").src = randomImageURL;
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    </script>
 </body>
 </html>
