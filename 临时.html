@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音频反转</title>
+    <style>
+        button {
+            background-color: #4CAF50; 
+            color: #fff; 
+            border: none; 
+            border-radius: 10px; 
+            margin-bottom: 10px; 
+            font-size: 18px; 
+            padding: 12px 24px; 
+            cursor: pointer;
+        }
+        input {
+            background-color: #4CAF50; 
+            color: #fff; 
+            display: none;
+        }
+        label {
+            background-color: #4CAF50; 
+            color: #fff;
+            padding: 12px 24px; 
+            border-radius: 10px; 
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="audioFileInput" accept="audio/*" style="display:none;">
+    <label for="audioFileInput" id="customFileButton">选择音频文件</label>
+    <button onclick="reverseAudio()">反转音频</button>  
+    <a id="downloadLink" style="display: none;" download="reversed_audio.wav">
+
+    </a>
+    <audio id="audioPlayer" controls style="display: none;"></audio>
+    <script>
+        var input = document.getElementById('audioFileInput');
+        var customFileButton = document.getElementById('customFileButton');
+
+        input.addEventListener('change', function () {
+            if (input.files.length > 0) {
+                customFileButton.innerText = '文件：' + input.files[0].name;
+
+                // 修改 label 样式
+                customFileButton.style.backgroundColor = 'transparent';
+                customFileButton.style.color = '#808080';  // 灰色
+            } else {
+                customFileButton.innerText = '选择音频文件';
+
+                // 恢复 label 样式
+                customFileButton.style.backgroundColor = '#4CAF50';  // 恢复原始颜色
+                customFileButton.style.color = '#fff';  // 恢复原始颜色
+            }
+        });
+
+        function reverseAudio() {
+            var input = document.getElementById('audioFileInput');
+            var downloadLink = document.getElementById('downloadLink');
+            var audioPlayer = document.getElementById('audioPlayer');
+            var customFileButton = document.getElementById('customFileButton');
+            if (input.files.length > 0) {
+                var audioFile = input.files[0];
+                // 显示文件名
+                customFileButton.innerText = '文件：' + audioFile.name;
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    var audioBuffer = null;
+                    audioContext.decodeAudioData(e.target.result, function (buffer) {
+                        // 反转音频数据
+                        var reversedBuffer = reverseBuffer(buffer);
+                        // 显示下载按钮
+                        downloadLink.style.display = 'block';
+                        // 创建下载链接
+                        var blob = bufferToWave(reversedBuffer);
+                        var url = URL.createObjectURL(blob);
+                        downloadLink.href = url;
+                        // 设置播放器的音频源
+                        audioPlayer.src = url;
+                        audioPlayer.style.display = 'block';
+                    });
+                };
+                // 读取上传的音频文件
+                reader.readAsArrayBuffer(audioFile);
+            } else {
+                alert('请先选择音频文件');
+            }
+        }
+
+        function reverseBuffer(buffer) {
+            // 复制音频数据
+            var reversedBuffer = buffer.getChannelData(0).slice().reverse();
+            // 创建新的 AudioBuffer
+            var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            var reversedAudioBuffer = audioContext.createBuffer(1, buffer.length, buffer.sampleRate);
+            reversedAudioBuffer.getChannelData(0).set(reversedBuffer);
+            return reversedAudioBuffer;
+        }
+
+        function bufferToWave(buffer) {
+            // 创建 WAV 格式的 Blob 对象
+            var format = 'audio/wav';
+            var data = new DataView(new ArrayBuffer(44 + buffer.length * 2));
+            writeString(data, 0, 'RIFF');
+            data.setUint32(4, 36 + buffer.length * 2, true);
+            writeString(data, 8, 'WAVE');
+            writeString(data, 12, 'fmt ');
+            data.setUint32(16, 16, true);
+            data.setUint16(20, 1, true);
+            data.setUint16(22, 1, true);
+            data.setUint32(24, buffer.sampleRate, true);
+            data.setUint32(28, buffer.sampleRate * 2, true);
+            data.setUint16(32, 2, true);
+            data.setUint16(34, 16, true);
+            writeString(data, 36, 'data');
+            data.setUint32(40, buffer.length * 2, true);
+            floatTo16BitPCM(data, 44, buffer.getChannelData(0));
+            return new Blob([data], { type: format });
+        }
+
+        function writeString(view, offset, string) {
+            // 写入字符串到 DataView
+            for (var i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        function floatTo16BitPCM(output, offset, input) {
+            // 浮点数转为 16 位 PCM
+            for (var i = 0; i < input.length; i++, offset += 2) {
+                var s = Math.max(-1, Math.min(1, input[i]));
+                output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+            }
+        }
+    </script>
+</body>
+</html>
