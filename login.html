@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>账户信息</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: rgb(71, 71, 71);
+  }
+  .account {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+  }
+  .account h2 {
+    margin-top: 0;
+  }
+  .info {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .info span {
+    font-weight: bold;
+    width: 20%;
+  }
+  .copy-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  .box {
+    background-color: rgb(196, 196, 196);
+    padding-top: 8px; 
+    padding-bottom: 5px; 
+    padding-left: 10px; 
+    padding-right: 10px; 
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="account">
+    <h2>ChatGPT4.0</h2>
+    <div class="info"><span>域名：</span> <a href="https://chat.openai.com/" target="_blank">https://chat.openai.com/</a></div>
+    <div class="box">
+      <div class="info"><span>账号：</span> MalomRepko@pm.me <button class="copy-btn" onclick="copyToClipboard('MalomRepko@pm.me')">复制</button></div>
+      <div class="info"><span>密码：</span> y@n^Oqt2Ox^v <button class="copy-btn" onclick="copyToClipboard('y@n^Oqt2Ox^v')">复制</button></div>
+    </div>
+    <div class="box">
+      <div class="info"><span>账号：</span> LloydCoto@pm.me <button class="copy-btn" onclick="copyToClipboard('LloydCoto@pm.me')">复制</button></div>
+      <div class="info"><span>密码：</span> &wXAd23^hg^9a <button class="copy-btn" onclick="copyToClipboard('&wXAd23^hg^9a')">复制</button></div>
+    </div>
+   
+  </div>
+
+<div class="account">
+  <h2>易语言吧</h2>
+  <div class="info"><span>域名：</span> <a href="https://www.eyy8.vip/" target="_blank">https://www.eyy8.vip/</a></div>
+  <div class="box">
+    <div class="info"><span>账号：</span> lele <button class="copy-btn" onclick="copyToClipboard('lele')">复制</button></div>
+    <div class="info"><span>密码：</span> qq123456 <button class="copy-btn" onclick="copyToClipboard('qq123456')">复制</button></div>
+  </div>
+</div>
+
+<div class="account">
+  <h2>我要吧-qq技术交流</h2>
+  <div class="info"><span>域名：</span> <a href="https://www.abc369.net/" target="_blank">https://www.abc369.net/</a></div>
+  <div class="box">
+    <div class="info"><span>账号：</span> 紫雨007 <button class="copy-btn" onclick="copyToClipboard('紫雨007')">复制</button></div>
+    <div class="info"><span>密码：</span> 176876846AAa <button class="copy-btn" onclick="copyToClipboard('176876846AAa')">复制</button></div>
+  </div>
+</div>
+
+<script>
+function copyToClipboard(text) {
+  var input = document.createElement('textarea');
+  input.innerHTML = text;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand('copy');
+  document.body.removeChild(input);
+  alert("已复制：" + text);
+}
+</script>
+
+</body>
+</html>
