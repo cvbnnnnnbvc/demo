@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浏览器检测示例</title>
+    <script>
+        // 检测是否为微信浏览器
+        function isWechatBrowser() {
+            var userAgent = navigator.userAgent.toLowerCase();
+            return userAgent.indexOf('micromessenger') !== -1;
+        }
+
+        // 检测是否为QQ浏览器
+        function isQQBrowser() {
+            var userAgent = navigator.userAgent.toLowerCase();
+            return userAgent.indexOf('qq/') !== -1;
+        }
+
+        // 当页面加载完成后执行
+        window.onload = function() {
+            if (isWechatBrowser()) {
+                console.log("这是微信浏览器");
+                // 在这里执行针对微信浏览器的操作，例如显示特定内容或跳转到特定页面
+                document.getElementById('browserType').innerText = "这是微信浏览器";
+            } else if (isQQBrowser()) {
+                console.log("这是QQ浏览器");
+                // 在这里执行针对QQ浏览器的操作，例如显示特定内容或跳转到特定页面
+                document.getElementById('browserType').innerText = "这是QQ浏览器";
+            } else {
+                console.log("这不是微信或QQ浏览器");
+                // 在这里执行针对其他浏览器的操作
+                document.getElementById('browserType').innerText = "这不是微信或QQ浏览器";
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>浏览器检测示例</h1>
+    <p id="browserType">正在检测浏览器类型...</p>
+
+    <!-- 这里可以放其他页面内容 -->
+
+</body>
+</html>
