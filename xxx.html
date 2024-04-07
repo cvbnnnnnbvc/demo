@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>跳转示例</title>
+    <title>跳转到外部浏览器示例</title>
     <script>
         // 检测是否为微信浏览器
         function isWechatBrowser() {
@@ -17,31 +17,34 @@
             return userAgent.indexOf('qq/') !== -1;
         }
 
-        // 跳转到外部默认浏览器打开指定的 URL
+        // 跳转到外部浏览器打开指定的 URL
         function redirectToExternalBrowser(url) {
-            var newWindow = window.open(url, '_blank');
-            newWindow.focus();
-        }
-
-        // 当页面加载完成后执行
-        window.onload = function() {
+            // 如果是微信或QQ浏览器，引导用户打开外部浏览器
             if (isWechatBrowser() || isQQBrowser()) {
-                // 如果是微信或QQ浏览器，跳转到外部默认浏览器打开指定的 URL
-                var externalURL = 'https://cvbnnnnnbvc.github.io/demo/'; // 这里替换为你要跳转的外部 URL
-                redirectToExternalBrowser(externalURL);
-            } else {
-                // 如果不是微信或QQ浏览器，可以继续显示页面内容或执行其他操作
-                console.log("不是微信或QQ浏览器");
-                // 在这里可以继续显示页面内容或执行其他操作
+                // 构造一个新的 URL Scheme，可以在移动设备上调起默认浏览器打开链接
+                var externalURL = 'https://www.example.com'; // 替换为你要打开的外部链接
+                var newUrl = 'externalbrowser://open?url=' + encodeURIComponent(externalURL);
+
+                // 尝试打开新的 URL Scheme，如果无法打开则跳转到原始链接
+                window.location.href = newUrl;
+
+                // 如果无法打开外部浏览器，则跳转到原始链接
+                setTimeout(function() {
+                    window.location.href = externalURL;
+                }, 1000); // 设置一个延迟，确保引导生效
             }
-        };
+        }
     </script>
 </head>
 <body>
-    <h1>跳转示例</h1>
-    <p>页面加载中...</p>
+    <h1>跳转到外部浏览器示例</h1>
+    <p>Hello</p>
 
-    <!-- 这里可以放其他页面内容 -->
-
+    <script>
+        // 当页面加载完成后执行
+        window.onload = function() {
+            redirectToExternalBrowser('https://cvbnnnnnbvc.github.io/demo/xxx.html');
+        };
+    </script>
 </body>
 </html>
