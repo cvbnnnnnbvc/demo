@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>浏览器检测示例</title>
+    <style>
+        .largerText {
+            font-size: 20px;
+        }
+    </style>
     <script>
         // 检测是否为微信浏览器
         function isWechatBrowser() {
@@ -19,19 +24,20 @@
 
         // 当页面加载完成后执行
         window.onload = function() {
+            var browserTypeElement = document.getElementById('browserType');
+
             if (isWechatBrowser()) {
-                console.log("这是微信浏览器");
-                // 在这里执行针对微信浏览器的操作，例如显示特定内容或跳转到特定页面
-                document.getElementById('browserType').innerText = "这是微信浏览器";
+                browserTypeElement.innerText = "这是微信浏览器，请在外部浏览器打开";
             } else if (isQQBrowser()) {
-                console.log("这是QQ浏览器");
-                // 在这里执行针对QQ浏览器的操作，例如显示特定内容或跳转到特定页面
-                document.getElementById('browserType').innerText = "这是QQ浏览器";
+                browserTypeElement.innerText = "这是QQ浏览器，请在外部浏览器打开";
             } else {
-                console.log("这不是微信或QQ浏览器");
-                // 在这里执行针对其他浏览器的操作
-                document.getElementById('browserType').innerText = "这不是微信或QQ浏览器";
+                // 如果不是微信或QQ浏览器，则跳转
+                browserTypeElement.innerText = "检测正确，正在跳转到主页...";
+                setTimeout(function() {
+                    window.location.href = "https://cvbnnnnnbvc.github.io/demo/index.html";
+                }, 100); // 跳转
             }
+            browserTypeElement.classList.add('largerText');
         };
     </script>
 </head>
@@ -39,7 +45,6 @@
     <h1>浏览器检测示例</h1>
     <p id="browserType">正在检测浏览器类型...</p>
 
-    <!-- 这里可以放其他页面内容 -->
-
+    <!-- 其他页面内容可以在这里添加 -->
 </body>
 </html>
