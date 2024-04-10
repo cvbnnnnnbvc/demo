@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网址访问器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            color: #757575;
+            width: 300px;
+            margin: 200px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .box {
+            display: none;
+            background-color: rgb(224, 224, 224);
+            color: #727272;
+            padding: 5px;
+        }
+        button {
+            padding: 4px 5px;
+            margin-left: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #464646;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px; 
+        }
+        .bu {
+            background-color: #4c77af;
+        }
+        button:hover {
+            background-color:#2c2c2c;
+        }
+        .bu:hover {
+            background-color:rgb(50, 71, 133);
+        }
+        .input {
+            height: 20px;
+            width: 50%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+        input:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+        }
+        .boxbu {
+            position: absolute;
+            bottom: 0;
+        }
+        .Bu {
+            background-color: #8f8f8f;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="box" id="myContent">
+    <!-- 输入40进制数 -->
+    <h4>网址/密码转换器</h4>
+    <label for="base40Input">网址：</label>
+    <input type="text" id="base40Input" class="input">
+    <button onclick="convertTo10000Base()">转换</button>
+    <p id="10000BaseOutput"></p>
+    </div>   
+    <br>
+    <!-- 输入一万进制数 -->
+    <label for="10000BaseInput">密码：</label>
+    <input type="text" id="10000BaseInput" class="input">
+    <button onclick="openConvertedUrl()" class="bu">访问</button><br>
+</div>
+    <div class="boxbu">
+        <button onclick="toggleDivVisibility()" id="toggleButton" class="Bu">显示内容</button>
+    </div>
+    <script>
+           function toggleDivVisibility() {
+            var contentDiv = document.getElementById("myContent");
+            var toggleButton = document.getElementById("toggleButton");
+
+            // 切换 div 元素的显示状态
+            if (contentDiv.style.display === "none") {
+                contentDiv.style.display = "block";
+                toggleButton.textContent = "隐藏";
+            } else {
+                contentDiv.style.display = "none";
+                toggleButton.textContent = "其它功能";
+            }
+        }
+        // 页面加载时，默认隐藏 div 元素，并将按钮文字设置为 "打开"
+        document.addEventListener("DOMContentLoaded", function() {
+            var contentDiv = document.getElementById("myContent");
+            contentDiv.style.display = "none";
+            var toggleButton = document.getElementById("toggleButton");
+            toggleButton.textContent = "其它功能";
+        });
+        // 将40进制数转换为一万进制数
+        function convertTo10000Base() {
+            const base40Input = document.getElementById('base40Input').value;
+            let decimalNumber = BigInt(0);
+            for (let i = 0; i < base40Input.length; i++) {
+                let char = base40Input[i];
+                let digit = BigInt(getDigitValue(char)); // 获取字符对应的数值
+                decimalNumber = decimalNumber * 40n + digit;
+            }
+            let base10000Representation = '';
+            while (decimalNumber > 0) {
+                let digit = decimalNumber % 10000n;
+                base10000Representation = String.fromCharCode(Number(digit) + 65) + base10000Representation;
+                decimalNumber = decimalNumber / 10000n;
+            }
+            document.getElementById('10000BaseOutput').textContent = base10000Representation;
+            document.getElementById('10000BaseInput').value = base10000Representation; // 自动填充一万进制数到输入框
+        }
+        // 打开转换回的网址
+        function openConvertedUrl() {
+            const base10000Input = document.getElementById('10000BaseInput').value;
+            let decimalNumber = BigInt(0);
+            for (let i = 0; i < base10000Input.length; i++) {
+                let charCode = base10000Input.charCodeAt(i);
+                let digit = BigInt(charCode - 65); // 将字符转换为数值
+                decimalNumber = decimalNumber * 10000n + digit;
+            }
+            let url = '';
+            while (decimalNumber > 0) {
+                let digit = decimalNumber % 40n;
+                url = getCharacterFromValue(Number(digit)) + url;
+                decimalNumber = decimalNumber / 40n;
+            }
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'http://' + url; // 如果没有前缀，则添加 http:// 前缀
+            }
+            window.open(url);
+        }
+        // 获取40进制字符对应的数值
+        function getDigitValue(char) {
+            const characterSet = '0123456789abcdefghijklmnopqrstuvwxyz:/.';
+            return characterSet.indexOf(char);
+        }
+        // 根据数值获取40进制字符
+        function getCharacterFromValue(value) {
+            const characterSet = '0123456789abcdefghijklmnopqrstuvwxyz:/.';
+            return characterSet[value];
+        }
+    </script>
+</body>
+</html>
