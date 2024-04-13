@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间密钥计算器</title>
+    <style>
+        body {
+           font-family: Arial, sans-serif;
+           background-color: #f4f4f4;
+           margin: 0;
+           padding: 0;
+       }
+       .container {
+           color: #757575;
+           width: 300px;
+           margin: 200px auto;
+           padding: 20px;
+           background-color: #ffffff;
+           border-radius: 8px;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+       }
+       button {
+           padding: 4px 5px;
+           margin-left: 5px;
+           border: none;
+           border-radius: 5px;
+           background-color: #29b6b6;
+           color: #fff;
+           cursor: pointer;
+           transition: background-color 0.3s;
+           margin-bottom: 10px; 
+       }
+       .input {
+           height: 20px;
+           width: 50%;
+           border: 1px solid #ccc;
+           border-radius: 5px;
+           resize: none;
+       }
+       input:focus {
+           border-color: #66afe9;
+           outline: 0;
+           -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+           box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+       }
+   </style>
+    <script>
+        function calculateAndDisplayResults() {
+            // 获取用户选择的日期和时间
+            var selectedDateTime = document.getElementById('selected-datetime').value;
+
+            // 解析用户选择的日期和时间为 Date 对象
+            var selectedDate = new Date(selectedDateTime);
+
+            // 获取年、月、日、小时和分钟
+            var year = selectedDate.getFullYear();
+            var month = selectedDate.getMonth() + 1; // 月份是从 0 开始的，所以需要加 1
+            var day = selectedDate.getDate();
+            var hours = selectedDate.getHours();
+            var minutes = selectedDate.getMinutes();
+
+            // 格式化月、日、小时和分钟为两位数的字符串
+            var formattedMonth = formatTime(month);
+            var formattedDay = formatTime(day);
+            var formattedHours = formatTime(hours);
+            var formattedMinutes = formatTime(minutes);
+
+            // 构建格式化后的日期时间字符串
+            var formattedDateTime = year + formattedMonth + formattedDay + formattedHours + formattedMinutes;
+
+            // 获取前六位数和后六位数
+            var prefix = formattedDateTime.substring(0, 6); // 前六位数
+            var suffix = formattedDateTime.substring(6);    // 后六位数
+
+            // 将前六位数和后六位数转换为数字
+            var prefixNumber = parseInt(prefix);
+            var suffixNumber = parseInt(suffix);
+
+            // 计算前六位数和后六位数相减的绝对值
+            var diff = Math.abs(prefixNumber - suffixNumber);
+
+            // 计算前六位数和后六位数相加的绝对值
+            var sum = Math.abs(prefixNumber + suffixNumber);
+
+            // 提取 diff-result 和 sum-result 的后三位数字
+            var diffLastThree = diff % 1000; // 取余数得到后三位
+            var sumLastThree = sum % 1000;   // 取余数得到后三位
+
+            // 组合后三位数字并显示在页面上
+            var combinedResult = "" + diffLastThree + sumLastThree; // 将数字转换为字符串并组合
+            var combinedResultElement = document.getElementById('combined-result');
+            combinedResultElement.textContent = combinedResult;
+
+            // 获取复制按钮元素
+            var copyButton = document.getElementById('copy-button');
+
+            // 根据时间密钥是否为空来控制按钮的显示
+            if (combinedResult === "") {
+                copyButton.style.display = "none"; // 隐藏按钮
+            } else {
+                copyButton.style.display = "inline-block"; // 显示按钮
+            }
+        }
+
+        // 辅助函数，确保时间数字显示为两位数
+        function formatTime(time) {
+            return (time < 10 ? "0" : "") + time;
+        }
+
+        function copyCombinedResult() {
+            // 获取要复制的时间密钥
+            var combinedResult = document.getElementById('combined-result').textContent;
+
+            // 创建临时文本输入框元素
+            var tempInput = document.createElement('input');
+            tempInput.value = combinedResult;
+            document.body.appendChild(tempInput);
+
+            // 选择文本并复制到剪贴板
+            tempInput.select();
+            document.execCommand('copy');
+
+            // 移除临时文本输入框
+            document.body.removeChild(tempInput);
+
+            // 提示复制成功
+            alert('时间密钥已复制: ' + combinedResult);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h3>时间密钥计算器</h3>
+        <label for="selected-datetime">选择日期和时间:</label>
+        <input type="datetime-local" id="selected-datetime" onchange="calculateAndDisplayResults()">
+        
+        <!-- 显示时间密钥 -->
+        <p>时间密钥: <span id="combined-result"></span></p>
+    
+        <!-- 复制按钮 -->
+        <button id="copy-button" onclick="copyCombinedResult()" style="display: none;">复制密钥</button>
+    </div>
+</body>
+</html>
