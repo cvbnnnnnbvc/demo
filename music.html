@@ -2,22 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1, user-scalable=no">
-    <title>网络电台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音乐电台</title>
     <style>
         body {
-            color: #e6e6e6;
-            background-color: rgb(132, 186, 171);
+            background-color: #bfdad2;
         }
-        h1 {
-            margin-left: 20px;
-            font-size: 36px; /* 设置字体大小 */
-            color: #e6e6e6; /* 设置文字颜色 */
-            text-shadow: 
-            -1px -1px 0 #303030,  
-             2px -2px 0 #303030,
-            -1px  1px 0 #303030,
-             2px  2px 0 #303030; /* 设置文字边缘色 */
+        audio {
+            width: 100%;
+            outline: none;
+        }
+        .audio-player {
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            margin: 200px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #eeeeee;
+        }
+        .play-btn {
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background-color: transparent;
+        }
+        h4 {
+            color: #828eeb;
+        }
+        #playStatus {
+            color: #585858; 
         }
         iframe {
             display: block;
@@ -25,35 +42,68 @@
             width: 100%;
             height: 165px;
         }
-
-        div {
-            display: block;
-            margin: 0 auto;
-            width: 360px;
-            margin-top: 20px;
-            background-color: rgb(39, 33, 122);
-            border-radius: 20px;
-            background: linear-gradient(45deg, #e5e5e5, #8d8d8d); 
-            color: rgb(128, 52, 52);
-            font-size: 12px;
-            padding-top: 15px;
-            padding-left: 20px;
-            line-height: 2;
-            border: 2px solid #7d7d7d;
-        }
     </style>
 </head>
 <body>
-    <h1>网络电台音乐</h1>
-        <iframe src="https://widgets.caster.fm/advancedplayer.php?h=108.168.175.149&p=10099&s=pro02&u=demoliquid&st=1&sr[0][k]=64&sr[0][f]=mp3&sr[0][m]=64mp3&sr[1][k]=64&sr[1][f]=oga&sr[1][m]=64ogg&sr[4][k]=64&sr[4][f]=m4a&sr[4][m]=64aac&sr[2][k]=128&sr[2][f]=mp3&sr[2][m]=128mp3&sr[3][k]=128&sr[3][f]=oga&sr[3][m]=128ogg">
-        </iframe>
-        <div><span style="color: rgb(17, 141, 36);">✔</span>  媒体格式：MP3、AAC、AAC-HE、Ogg/Vorbis、Ogg/Opus<br>
-             <span style="color: rgb(17, 141, 36);">✔</span>  检测手机并自动切换到低比特率功能, 当前播放+专辑封面显示<br>
-             <span style="color: rgb(17, 141, 36);">✔</span>  检测手机并自动切换到低比特率功能<br>
-             <span style="color: rgb(17, 141, 36);">✔</span>  移动支持, 收听链接, 完全响应<br>
-             <span style="color: rgb(17, 141, 36);">✔</span>  指示是否实时播放或 AutoDJ<br>
-             <span style="color: rgb(17, 141, 36);">✔</span>  为您的 Listeres 嵌入代码<br>
-             <span style="color: rgb(17, 141, 36);">✔</span>  可选：从 Centova Cast 获取您的定制专辑艺术<br>
-        </div>
+
+<div class="audio-player">
+    <h4>在线音乐电台</h4>
+    <button class="play-btn" onclick="toggleAudio()"></button>
+    <audio id="myAudio" onplay="updatePlayButton(true)" onpause="updatePlayButton(false)">
+        <source src="https://radio.freenode.net/radio.ogg" type="audio/mpeg">
+        您的浏览器不支持音频播放。
+    </audio>
+    <p id="playStatus">已暂停！</p>
+</div>
+<iframe src="https://widgets.caster.fm/advancedplayer.php?h=108.168.175.149&p=10099&s=pro02&u=demoliquid&st=1&sr[0][k]=64&sr[0][f]=mp3&sr[0][m]=64mp3&sr[1][k]=64&sr[1][f]=oga&sr[1][m]=64ogg&sr[4][k]=64&sr[4][f]=m4a&sr[4][m]=64aac&sr[2][k]=128&sr[2][f]=mp3&sr[2][m]=128mp3&sr[3][k]=128&sr[3][f]=oga&sr[3][m]=128ogg">
+</iframe>
+
+<script>
+    var audio = document.getElementById('myAudio');
+    var playButton = document.querySelector('.play-btn');
+    var playStatusText = document.getElementById('playStatus');
+
+    function toggleAudio() {
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    }
+
+    function updatePlayButton(isPlaying) {
+        if (isPlaying) {
+            playButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-pause-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M9 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" stroke-width="0" fill="currentColor" />
+                    <path d="M17 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" stroke-width="0" fill="currentColor" />
+                </svg>
+            `;
+            playStatusText.textContent = "加载播放中..";
+        } else {
+            playButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-play-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" stroke-width="0" fill="currentColor" />
+            </svg>
+            `;
+            playStatusText.textContent = "已暂停！";
+        }
+    }
+
+    // 初始化按钮图像状态为暂停状态（2.png）
+    updatePlayButton(false); // 初始状态为暂停
+
+    // 监听音频播放状态变化
+    audio.onplay = function() {
+        updatePlayButton(true); // 播放状态
+    };
+
+    audio.onpause = function() {
+        updatePlayButton(false); // 暂停状态
+    };
+</script>
+
 </body>
 </html>
