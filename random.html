@@ -7,12 +7,19 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            background: radial-gradient(circle at center, rgb(0, 220, 159) 0%, rgb(4, 75, 117) 100%);
+            /* 使用适当的前缀以支持不同的浏览器 */
+            /* Chrome, Safari, Opera */
+            background: -webkit-radial-gradient(circle at center, rgb(0, 220, 159) 0%, rgb(4, 75, 117) 100%);
+            /* Firefox */
+            background: -moz-radial-gradient(circle at center, rgb(0, 220, 159) 0%, rgb(4, 75, 117) 100%);
+            /* IE 10+ */
+            background: -ms-radial-gradient(circle at center, rgb(0, 220, 159) 0%, rgb(4, 75, 117) 100%);
         }
         .button-container {
             display: flex;
@@ -23,11 +30,11 @@
             padding: 15px 30px;
             font-size: 18px;
             font-weight: bold;
-            border: 3px solid #000;
+            border: 3px solid #e0e0e0;
             border-radius: 8px;
             cursor: pointer;
             background-color: transparent;
-            color: #000;
+            color: #e0e0e0;
             transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
             margin-bottom: 20px;
         }
@@ -41,10 +48,14 @@
             border-color: #0056b3;
             color: #0056b3;
         }
+        h3 {
+            color: rgb(5, 64, 98);
+        }
     </style>
 </head>
 <body>
     <div class="button-container">
+        <h3>选择感兴趣的选项：</h3>
         <button onclick="openLinkInNewTab('https://cvbnnnnnbvc.github.io/demo/music.html')">电台音乐</button>
         <button onclick="openLinkInNewTab('https://cvbnnnnnbvc.github.io/demo/pic.html')">随机图片</button>
     </div>
