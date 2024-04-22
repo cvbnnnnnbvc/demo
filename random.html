@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: 3px solid #000;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: transparent;
+            color: #000;
+            transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            border-color: #007bff;
+            color: #007bff;
+        }
+        button:active {
+            transform: translateY(0);
+            border-color: #0056b3;
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button onclick="openLinkInNewTab('https://cvbnnnnnbvc.github.io/demo/music.html')">电台音乐</button>
+        <button onclick="openLinkInNewTab('https://cvbnnnnnbvc.github.io/demo/pic.html')">随机图片</button>
+    </div>
+
+    <script>
+        function openLinkInNewTab(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }
+    </script>
+</body>
+</html>
