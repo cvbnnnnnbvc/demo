@@ -7,13 +7,24 @@
         /* 样式可根据需要进行修改 */
         body {
             text-align: center;
-            margin-top: 50px;
+            padding-top: 50px;
             font-family: Arial, sans-serif;
-            background-color: rgb(249, 201, 201);
-            color: #27283e;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle at center, rgb(103, 230, 239) 0%, rgb(61, 4, 117) 100%);
+            /* 使用适当的前缀以支持不同的浏览器 */
+            /* Chrome, Safari, Opera */
+            background: -webkit-radial-gradient(circle at center, rgb(103, 230, 239) 0%, rgb(61, 4, 117) 100%);
+            /* Firefox */
+            background: -moz-radial-gradient(circle at center, rgb(103, 230, 239) 0%, rgb(61, 4, 117) 100%);
+            /* IE 10+ */
+            background: -ms-radial-gradient(circle at center, rgb(103, 230, 239) 0%, rgb(61, 4, 117) 100%);
         }
         img {
-            max-width: 50%;
+            max-height: 60%;
+            max-width: 70%;
             height: auto;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -21,7 +32,11 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         button {
-            background-color: rgb(83, 174, 200);
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgb(200, 83, 184);
             color: #fffefe;
             border: none;
             font-size: 16px;
@@ -31,16 +46,19 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: rgb(48, 126, 171);
+            background-color: rgb(143, 58, 107);
+        }
+        h2, h4 {
+            color: #f8f8f8;
         }
     </style>
 </head>
 <body>
-    <button onclick="refreshPage()">刷新图片</button>
-    <h2>采用Unsplash图片API</h2>
+    <h2>Unsplash_API</h2>
     <h4>生成的随机图片:</h4>
     <img id="randomImage" src="" alt="加载中..">
     <br>
+    <button onclick="refreshPage()">下一张</button>
     <script>
         function refreshPage() {
             // 刷新当前页面
