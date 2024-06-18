@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=10, user-scalable=yes">
+    <title>图片像素混淆</title>
+</head>
+<body>
+    <style>
+        body {
+            text-align: center;
+            color: #ffffff; 
+            background: #180d23; 
+        }
+        h1 {
+            background: linear-gradient(to right, #ff6699, #cc99ff); /* 渐变色 */
+            -webkit-background-clip: text; /* 使用文字作为渐变色的裁剪区域（适用于WebKit浏览器） */
+            color: transparent; /* 让文字颜色变为透明，以显示渐变色 */
+            display: inline-block; /* 使渐变色应用到文字上 */
+        }
+        button {
+          background: #3498db; 
+          color: #fff; 
+          border: none;
+          border-radius: 5px; 
+          height: 2rem; 
+          min-width: 4rem; 
+          margin: 0 0.25rem;
+          cursor: pointer;
+          font-size: 1rem; 
+        }
+        select {
+            background: #fff;
+            border: 1px solid #3498db;
+            height: 1.5rem;
+            width: 10rem;
+            color: #ffffff;
+            background: #3498db;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 0.2rem;
+            outline: none; /* 将轮廓设置为透明 */
+        }
+        input {           
+            border: 1px solid #aaa;           
+            height: 1.25rem;
+            width: 10rem;
+            border-radius: 5px;
+        }
+        input:focus {
+          outline: 1px solid #3498db;
+          border: 2px solid #3498db; 
+        }
+        option {
+          background: #fff;
+          color: #626262;
+        }
+        img {
+          width: 500px;
+          height: auto; 
+        }
+    </style>
+    <h1>图片像素混淆</h1>
+    <div>
+        模式：<select id="select">
+            <option value="p2">行+列</option>
+            <option value="p1">行模式</option>
+            <!--
+            <option value="b1">拼图混淆</option>
+            <option value="bw1">黑白混淆</option>
+            -->
+        </select>
+    </div>
+    <div>密钥：<input id="input" type="number" value="0.666" /></div>
+    <div>
+        <br />
+        <button id="button1">选择图片</button>
+        <button id="button2">混淆</button>
+        <button id="button3">解混淆</button>
+        <button id="button4">返回</button>
+    </div>
+    <div id="info" style="padding:0.5rem 0;display:none;color:#666">请稍等</div>
+    <div id="imagebox" style="padding:0 1rem"></div>
+    <script>
+       function logistic(x,n){
+        let l=[x]
+        n--
+        while(n-->0){
+          l.push(x=3.9999999*x*(1-x))
+        }
+        return l
+      }
+      function logisticmap(l){
+        return l.map((x,a)=>[x,a]).sort(logisticmapsort).map(x=>x[1])
+      }
+      function logisticmapsort(a,b){
+        return a[0]-b[0]
+      }
+      function enPE1(arr1,arr2,w,h,k){
+        let list=logisticmap(logistic(k,w))
+        for(let i=0;i<w;i++){
+          for(let j=0;j<h;j++){
+            let i2=list[i]
+            arr2[(i+j*w)*4  ]=arr1[(i2+j*w)*4  ]
+            arr2[(i+j*w)*4+1]=arr1[(i2+j*w)*4+1]
+            arr2[(i+j*w)*4+2]=arr1[(i2+j*w)*4+2]
+            arr2[(i+j*w)*4+3]=arr1[(i2+j*w)*4+3]
+          }
+        }
+      }
+      function dePE1(arr1,arr2,w,h,k){
+        let list=logisticmap(logistic(k,w))
+        for(let i=0;i<w;i++){
+          for(let j=0;j<h;j++){
+            let i2=list[i]
+            arr2[(i2+j*w)*4  ]=arr1[(i+j*w)*4  ]
+            arr2[(i2+j*w)*4+1]=arr1[(i+j*w)*4+1]
+            arr2[(i2+j*w)*4+2]=arr1[(i+j*w)*4+2]
+            arr2[(i2+j*w)*4+3]=arr1[(i+j*w)*4+3]
+          }
+        }
+      }
+      function enPE2(arr1,arr2,w,h,k){
+        let arr3=new Uint8Array(4*w*h)
+        let k1=k
+        for(let j=0;j<h;j++){
+          let list1=logistic(k1,w)
+          let list=logisticmap(list1)
+          k1=list1[list1.length-1]
+          for(let i=0;i<w;i++){
+            let i2=list[i]
+            arr3[(i+j*w)*4  ]=arr1[(i2+j*w)*4  ]
+            arr3[(i+j*w)*4+1]=arr1[(i2+j*w)*4+1]
+            arr3[(i+j*w)*4+2]=arr1[(i2+j*w)*4+2]
+            arr3[(i+j*w)*4+3]=arr1[(i2+j*w)*4+3]
+          }
+        }
+        k1=k
+        for(let i=0;i<w;i++){
+          let list1=logistic(k1,h)
+          let list=logisticmap(list1)
+          k1=list1[list1.length-1]
+          for(let j=0;j<h;j++){
+            let j2=list[j]
+            arr2[(i+j*w)*4  ]=arr3[(i+j2*w)*4  ]
+            arr2[(i+j*w)*4+1]=arr3[(i+j2*w)*4+1]
+            arr2[(i+j*w)*4+2]=arr3[(i+j2*w)*4+2]
+            arr2[(i+j*w)*4+3]=arr3[(i+j2*w)*4+3]
+          }
+        }
+      }
+      function dePE2(arr1,arr2,w,h,k){
+        let arr3=new Uint8Array(4*w*h)
+        let k1=k
+        for(let i=0;i<w;i++){
+          let list1=logistic(k1,h)
+          let list=logisticmap(list1)
+          k1=list1[list1.length-1]
+          for(let j=0;j<h;j++){
+            let j2=list[j]
+            arr3[(i+j2*w)*4  ]=arr1[(i+j*w)*4  ]
+            arr3[(i+j2*w)*4+1]=arr1[(i+j*w)*4+1]
+            arr3[(i+j2*w)*4+2]=arr1[(i+j*w)*4+2]
+            arr3[(i+j2*w)*4+3]=arr1[(i+j*w)*4+3]
+          }
+        }
+        k1=k
+        for(let j=0;j<h;j++){
+          let list1=logistic(k1,w)
+          let list=logisticmap(list1)
+          k1=list1[list1.length-1]
+          for(let i=0;i<w;i++){
+            let i2=list[i]
+            arr2[(i2+j*w)*4  ]=arr3[(i+j*w)*4  ]
+            arr2[(i2+j*w)*4+1]=arr3[(i+j*w)*4+1]
+            arr2[(i2+j*w)*4+2]=arr3[(i+j*w)*4+2]
+            arr2[(i2+j*w)*4+3]=arr3[(i+j*w)*4+3]
+          }
+        }
+      }
+      let info=document.getElementById("info")
+      let imagelist=[]//图片列表，元素增加属性ifloadend
+      let initbloblist=[]//blob(图片)列表
+      let imagebox=document.getElementById("imagebox")
+      function createimgbox(src,text){//创建图片展示框
+        let div1=document.createElement("div")
+        div1.style.padding="1rem 0"
+        if(text!=""){
+          let div2=document.createElement("div")
+          div2.style.padding="0.5rem 0"
+          let span=document.createElement("span")
+          span.style.color="#666"
+          span.innerText=text+"  "
+          div2.appendChild(span)
+          let button = document.createElement("button");
+          button.innerText = "保存图片";
+          button.addEventListener("click", function() {
+            let a = document.createElement("a");
+            a.href = src;
+            a.download = Math.random().toString(16).slice(2) + ".png";
+            a.click();
+          });
+          div2.appendChild(button);
+          div1.appendChild(div2);
+        }
+        let img=document.createElement("img")
+        img.style.maxWidth="100%"
+        img.src=src
+        div1.appendChild(img)
+        return div1
+      }
+      function appendimage(src,text){//创建并绑定图片展示框
+        imagebox.appendChild(createimgbox(src,text))
+      }
+      function reloadimage(imgbloblist){//(重)加载图片，从blob(图片)列表
+        let imgbloblist2=Array.from(imgbloblist)//预留，防止(使用raf的话)initbloblist被修改
+        imagebox.innerHTML=""//图片展示清空
+        //requestAnimationFrame(()=>{
+          //requestAnimationFrame(()=>{
+            imagelist.map(x=>URL.revokeObjectURL(x.src))//释放
+            imagelist=[]//清空
+            imgbloblist2.map(x=>{
+              let src=URL.createObjectURL(x)
+              appendimage(src,"")//显示图像
+              let img=new Image()
+              img.src=src
+              imagelist.push(img)//先加入图片列表，使得图像按顺序
+              img.onload=()=>{
+                img.ifloadend=true//表示加载完毕
+              }
+            })
+          //})
+        //})
+      }
+      document.getElementById("button4").onclick=()=>{//复原按钮
+        if(info.style.display!="none"){//检测是否正在进行
+          return
+        }
+        reloadimage(initbloblist)
+      }
+      document.getElementById("button1").onclick=()=>{//上传图片按钮
+        if(info.style.display!="none"){//检测是否正在进行
+          return
+        }
+        let input=document.createElement("input")
+        input.type="file"
+        input.accept="image/*"
+        input.multiple=true
+        input.onchange=()=>{
+          initbloblist=Array.from(input.files)
+          reloadimage(initbloblist)
+        }
+        input.click()
+      }
+      function encdec(ifdec){
+        if(info.style.display!="none"){//检测是否正在进行
+          console.log("其他操作正在进行")
+          return
+        }
+        if(imagelist.length==0){//检测图片数量
+          console.log("图片未上传")
+          alert("请先上传图片！")
+          return
+        }
+        if(!imagelist.every(x=>x.ifloadend)){//检测图片是否加载
+          console.log("图片未加载成功")
+          return
+        }
+        let imagelist1=Array.from(imagelist)
+        imagebox.innerHTML=""
+        imagelist.map(x=>URL.revokeObjectURL(x.src))
+        imagelist=[]
+        let key=parseFloat(document.getElementById("input").value)
+        let mode=document.getElementById("select").value
+        let func={//混淆算法
+          "p1":[enPE1,dePE1],
+          "p2":[enPE2,dePE2]
+        }[mode][ifdec?1:0]
+        let nsf=(x,y)=>[x,y]//默认尺寸函数
+        let sizefunc1={//预处理尺寸
+          "p1":[nsf,nsf],
+          "p2":[nsf,nsf]
+        }[mode][ifdec?1:0]
+        let sizefunc2={//处理后尺寸，将来可能会将这些写在混淆函数的属性
+          "p1":[nsf,nsf],
+          "p2":[nsf,nsf]
+        }[mode][ifdec?1:0]
+        function make(i){
+          let t=Date.now()
+          let img=imagelist1[i]
+          let wh1=sizefunc1(img.width,img.height)
+          let wh2=sizefunc2(img.width,img.height)
+          let cvs=document.createElement("canvas")
+          let ctx=cvs.getContext("2d")
+          cvs.width=wh1[0]
+          cvs.height=wh1[1]
+          ctx.drawImage(img,0,0)
+          ctx.fillStyle="#fff"
+          ctx.fillRect(img.width,0,wh1[0]-img.width+1,wh1[1])
+          ctx.fillRect(0,img.height,wh1[0],wh1[1]-img.height+1)
+          let imgdata1=ctx.getImageData(0,0,wh1[0],wh1[1])
+          cvs.width=wh2[0]
+          cvs.height=wh2[1]
+          let imgdata2=ctx.getImageData(0,0,wh2[0],wh2[1])
+          func(imgdata1.data,imgdata2.data,wh1[0],wh1[1],key)
+          ctx.putImageData(imgdata2,0,0)
+          cvs.toBlob(b=>{
+            t=Date.now()-t
+            let src=URL.createObjectURL(b)
+            let text="分辨率："+wh1.join("×")+" "+"生成时间："+t+"ms"
+            appendimage(src,text)
+            let img=new Image()
+            img.src=src
+            imagelist.push(img)
+            img.onload=()=>{
+              img.ifloadend=true
+            }
+            info.innerText="正在生成中  "+(i+1)+"/"+imagelist1.length
+            if(i+1<imagelist1.length){
+              requestAnimationFrame(()=>{//两次raf，防止info更新不及时
+                requestAnimationFrame(()=>{
+                  make(i+1)
+                })
+              })
+            }else{
+              info.style.display="none"
+            }
+          },"image/png")
+        }
+        info.style.display="block"//显示信息，并阻断其他操作
+        info.innerText="正在生成中  0/"+imagelist1.length
+        requestAnimationFrame(()=>{//两次raf，因为某些情况下一次raf并不是真正raf
+          requestAnimationFrame(()=>{
+            make(0)
+          })
+        })
+      }
+      document.getElementById("button2").onclick=()=>{
+        encdec(false)
+      }
+      document.getElementById("button3").onclick=()=>{
+        encdec(true)
+      }
+    </script>
+</body>
+</html>
