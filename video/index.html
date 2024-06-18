@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <title>AES-GCM加密视频.</title>
+  <meta name="Description" content="在您本地电脑的浏览器里面就可以进行加密解密，无需安装任何软件，采用 AES 256 算法.">
+  <meta name="Keywords"
+    content="文件加密神器|免费加密软件|开源加密软件mac|开源免费加密软件windows|开源免费加密软件linux">
+
+</head>
+
+<body>
+  <div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+
+      <div class="col sm-12 col-md-8 col-lg-6" style="margin-top: 60px;">
+        <h3>AES-GCM加密视频 <img src="assets/logo.png" width="35"></h3>
+        <p class="lead">
+          一个免费,
+          
+          可靠的加解密视频网页.
+        </p>
+
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="customFile">
+          <label class="custom-file-label" for="customFile">
+            <div id="file-placeholder">第1步：选择要处理的文件</div>
+          </label>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <label for="inputPassword"></label>
+            <input type="text" id="inputPassword" placeholder="第2步：选择一个密码或自动生成"
+              class="form-control mx-sm-6" aria-describedby="passwordHelpInline">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" id="generateButton" data-toggle="tooltip"
+                data-placement="right" title="自动生成随机密码"><i class="fas fa-sync-alt"></i></button>
+            </div>
+          </div>
+
+          <small id="passwordHelpInline" class="text-muted">
+            <b>密码强度</b>: <span id="strength-text"></span>
+          </small>
+          <div class="progress progress-sm">
+            <div class="progress-bar bg-secondary" id="strength-meter" role="progressbar" style="width: 4;"
+              aria-valuenow="0" aria-valuemin="0" aria-valuemax="4"></div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-outline-dark" id="encryptBtn">开始加密</button>
+        <button type="button" class="btn btn-outline-dark" id="decryptBtn">开始解密</button>
+        <button type="button" class="btn btn-outline-danger" id="resetBtn" style="display: none"><i
+            class="fas fa-redo"></i> 重新设置</button>
+        <br>
+        <small class="text-muted">
+          请务必保存好您的密码，一旦丢失，您将无法解密您的文件.
+        </small>
+        <br>
+        <br>
+        <div id="error"></div>
+      </div>
+      <!--end col-->
+    </div><!-- end row -->
+    <br>
+    <br>
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class="col-sm-12 col-md-8 col-lg-6" id="results"></div>
+    </div>
+  </div>
+  <br>
+  <div class="footer">
+    <nav class="navbar  navbar-light bg-light">
+      <ul class="nav navbar-nav mx-auto">
+        <li class="nav-item">
+          <div class="nav-link">文件支持：zip</a>
+            </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="loader">
+    <div class="sk-folding-cube">
+      <div class="sk-cube1 sk-cube"></div>
+      <div class="sk-cube2 sk-cube"></div>
+      <div class="sk-cube4 sk-cube"></div>
+      <div class="sk-cube3 sk-cube"></div>
+    </div>
+  </div>
+  <script src="assets/js/bundle.js"></script>
+  <script src="./renderer.js"></script>
+</body>
+</html>
