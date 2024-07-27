@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网址转换</title>
+    <title>网址链接混淆器</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,10 +71,10 @@
 </head>
 <body>
 <div class="container">
-    <h4>网址转换器</h4>
-    <label for="base40Input">输入网址：</label>
+    <h4>网址链接混淆器</h4>
+    <label for="base40Input">输入链接地址：</label>
     <input type="text" id="base40Input" class="input">
-    <button onclick="convertTo10000Base()">转换</button>
+    <button onclick="convertTo10000Base()">混淆</button>
     <p id="10000BaseOutput"></p>
     <button id="copyButton" onclick="copyToClipboard()">复制链接</button>
 </div>
@@ -120,7 +120,7 @@
         navigator.clipboard.writeText(url)
             .then(() => {
                 const feedback = document.createElement('div');
-                feedback.textContent = '链接已复制到剪贴板！';
+                feedback.textContent = '链接已复制！可以在浏览器粘贴访问';
                 feedback.style.position = 'fixed';
                 feedback.style.bottom = '10px';
                 feedback.style.right = '10px';
