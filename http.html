@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- 兼容 IE -->
     <title>网址链接混淆器</title>
     <style>
         body {
@@ -72,7 +73,7 @@
 <body>
 <div class="container">
     <h4>网址链接混淆器</h4>
-    <label for="base40Input">输入链接地址：</label>
+    <label for="base40Input">输入链接：</label>
     <input type="text" id="base40Input" class="input">
     <button onclick="convertTo10000Base()">混淆</button>
     <p id="10000BaseOutput"></p>
@@ -81,26 +82,27 @@
 <script>
     // 将40进制数转换为一万进制数
     function convertTo10000Base() {
-        const base40Input = document.getElementById('base40Input').value;
-        let decimalNumber = BigInt(0);
-        for (let i = 0; i < base40Input.length; i++) {
-            let char = base40Input[i];
-            let digit = BigInt(getDigitValue(char)); // 获取字符对应的数值
-            decimalNumber = decimalNumber * 40n + digit;
+        var base40Input = document.getElementById('base40Input').value;
+        var decimalNumber = 0;
+        var base = 40;
+        for (var i = 0; i < base40Input.length; i++) {
+            var char = base40Input[i];
+            var digit = getDigitValue(char); // 获取字符对应的数值
+            decimalNumber = decimalNumber * base + digit;
         }
-        let base10000Representation = '';
+        var base10000Representation = '';
         while (decimalNumber > 0) {
-            let digit = decimalNumber % 10000n;
-            base10000Representation = String.fromCharCode(Number(digit) + 65) + base10000Representation;
-            decimalNumber = decimalNumber / 10000n;
+            var digit = decimalNumber % 10000;
+            base10000Representation = String.fromCharCode(digit + 65) + base10000Representation;
+            decimalNumber = Math.floor(decimalNumber / 10000);
         }
-        const url = 'https://fuck-qq.com/http?param=' + base10000Representation;
-        const outputElement = document.getElementById('10000BaseOutput');
-        outputElement.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
+        var url = 'https://fuck-qq.com/http?param=' + base10000Representation;
+        var outputElement = document.getElementById('10000BaseOutput');
+        outputElement.innerHTML = '<a href="' + url + '" target="_blank">' + url + '</a>';
         outputElement.dataset.url = url; // 存储 URL 以供复制使用
 
         // 显示或隐藏复制按钮
-        const copyButton = document.getElementById('copyButton');
+        var copyButton = document.getElementById('copyButton');
         if (base10000Representation) {
             copyButton.style.display = 'inline-block';
         } else {
@@ -110,50 +112,57 @@
 
     // 获取40进制字符对应的数值
     function getDigitValue(char) {
-        const characterSet = '0123456789abcdefghijklmnopqrstuvwxyz:/.--';
+        var characterSet = '0123456789abcdefghijklmnopqrstuvwxyz:/.--';
         return characterSet.indexOf(char);
     }
 
     function copyToClipboard() {
-    const url = document.getElementById('10000BaseOutput').dataset.url;
-    if (url) {
-        navigator.clipboard.writeText(url)
-            .then(() => {
-                const feedback = document.createElement('div');
-                feedback.textContent = '链接已复制！可以在浏览器粘贴访问';
-                feedback.style.position = 'fixed';
-                feedback.style.bottom = '10px';
-                feedback.style.right = '10px';
-                feedback.style.backgroundColor = '#4CAF50';
-                feedback.style.color = 'white';
-                feedback.style.padding = '10px';
-                feedback.style.borderRadius = '5px';
-                document.body.appendChild(feedback);
-                setTimeout(() => {
-                    document.body.removeChild(feedback);
-                }, 2000);
-            })
-            .catch(err => {
+        var url = document.getElementById('10000BaseOutput').dataset.url;
+        if (url) {
+            var textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    var feedback = document.createElement('div');
+                    feedback.textContent = '链接已复制！可以在浏览器粘贴访问';
+                    feedback.style.position = 'fixed';
+                    feedback.style.bottom = '10px';
+                    feedback.style.right = '10px';
+                    feedback.style.backgroundColor = '#4CAF50';
+                    feedback.style.color = 'white';
+                    feedback.style.padding = '10px';
+                    feedback.style.borderRadius = '5px';
+                    document.body.appendChild(feedback);
+                    setTimeout(function() {
+                        document.body.removeChild(feedback);
+                    }, 2000);
+                } else {
+                    throw new Error('复制失败');
+                }
+            } catch (err) {
                 console.error('复制失败:', err);
-            });
-    } else {
-        // 链接为空时的处理
-        const feedback = document.createElement('div');
-        feedback.textContent = '没有可复制的链接';
-        feedback.style.position = 'fixed';
-        feedback.style.bottom = '10px';
-        feedback.style.right = '10px';
-        feedback.style.backgroundColor = '#f44336';
-        feedback.style.color = 'white';
-        feedback.style.padding = '10px';
-        feedback.style.borderRadius = '5px';
-        document.body.appendChild(feedback);
-        setTimeout(() => {
-            document.body.removeChild(feedback);
-        }, 2000);
+            }
+            document.body.removeChild(textArea);
+        } else {
+            // 链接为空时的处理
+            var feedback = document.createElement('div');
+            feedback.textContent = '没有可复制的链接';
+            feedback.style.position = 'fixed';
+            feedback.style.bottom = '10px';
+            feedback.style.right = '10px';
+            feedback.style.backgroundColor = '#f44336';
+            feedback.style.color = 'white';
+            feedback.style.padding = '10px';
+            feedback.style.borderRadius = '5px';
+            document.body.appendChild(feedback);
+            setTimeout(function() {
+                document.body.removeChild(feedback);
+            }, 2000);
+        }
     }
-}
-
 </script>
 </body>
 </html>
