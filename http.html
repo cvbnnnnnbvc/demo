@@ -94,7 +94,7 @@
             base10000Representation = String.fromCharCode(Number(digit) + 65) + base10000Representation;
             decimalNumber = decimalNumber / 10000n;
         }
-        const url = 'http://fuck-qq.com/http?param=' + base10000Representation;
+        const url = 'https://fuck-qq.com/http?param=' + base10000Representation;
         const outputElement = document.getElementById('10000BaseOutput');
         outputElement.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
         outputElement.dataset.url = url; // 存储 URL 以供复制使用
