@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网址转换器</title>
+    <title>网址转换</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,7 +72,7 @@
 <body>
 <div class="container">
     <h4>网址转换器</h4>
-    <label for="base40Input">网址：</label>
+    <label for="base40Input">输入网址：</label>
     <input type="text" id="base40Input" class="input">
     <button onclick="convertTo10000Base()">转换</button>
     <p id="10000BaseOutput"></p>
@@ -114,19 +114,46 @@
         return characterSet.indexOf(char);
     }
 
-    // 复制链接到剪贴板
     function copyToClipboard() {
-        const url = document.getElementById('10000BaseOutput').dataset.url;
-        if (url) {
-            navigator.clipboard.writeText(url).then(() => {
-                alert('链接已复制到剪贴板！');
-            }).catch(err => {
+    const url = document.getElementById('10000BaseOutput').dataset.url;
+    if (url) {
+        navigator.clipboard.writeText(url)
+            .then(() => {
+                const feedback = document.createElement('div');
+                feedback.textContent = '链接已复制到剪贴板！';
+                feedback.style.position = 'fixed';
+                feedback.style.bottom = '10px';
+                feedback.style.right = '10px';
+                feedback.style.backgroundColor = '#4CAF50';
+                feedback.style.color = 'white';
+                feedback.style.padding = '10px';
+                feedback.style.borderRadius = '5px';
+                document.body.appendChild(feedback);
+                setTimeout(() => {
+                    document.body.removeChild(feedback);
+                }, 2000);
+            })
+            .catch(err => {
                 console.error('复制失败:', err);
             });
-        } else {
-            alert('没有可复制的链接');
-        }
+    } else {
+        // 链接为空时的处理
+        const feedback = document.createElement('div');
+        feedback.textContent = '没有可复制的链接';
+        feedback.style.position = 'fixed';
+        feedback.style.bottom = '10px';
+        feedback.style.right = '10px';
+        feedback.style.backgroundColor = '#f44336';
+        feedback.style.color = 'white';
+        feedback.style.padding = '10px';
+        feedback.style.borderRadius = '5px';
+        document.body.appendChild(feedback);
+        setTimeout(() => {
+            document.body.removeChild(feedback);
+        }, 2000);
     }
+}
+
 </script>
 </body>
 </html>
