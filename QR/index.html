@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息生成二维码</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        p {
+            margin: 0;
+            color: #474747;
+            font-size: 23px;
+        }
+        form {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        canvas {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+        }
+    </style>
+</head>
+<body>
+    <p>个人信息生成二维码</p>
+    <h4>中文信息扫码不能正常显示</h4>
+    <form id="infoForm">
+        <div class="form-group">
+            <label for="name">姓名:</label>
+            <input type="text" id="name" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">电话:</label>
+            <input type="tel" id="phone">
+        </div>
+        <div class="form-group">
+            <label for="email">电子邮件:</label>
+            <input type="email" id="email">
+        </div>
+        <div class="form-group">
+            <label for="address">地址:</label>
+            <input type="text" id="address">
+        </div>
+        <div class="form-group">
+            <label for="photo">头像 URL:</label>
+            <input type="text" id="photo">
+        </div>
+        <div class="form-group">
+            <label for="org">组织:</label>
+            <input type="text" id="org">
+        </div>
+        <div class="form-group">
+            <label for="title">职位:</label>
+            <input type="text" id="title">
+        </div>
+        <div class="form-group">
+            <label for="url">个人网站 URL:</label>
+            <input type="text" id="url">
+        </div>
+        <div class="form-group">
+            <label for="birthday">生日:</label>
+            <input type="date" id="birthday">
+        </div>
+        <button type="button" onclick="generateQR()">生成二维码</button>
+    </form>
+    <canvas id="qrcode"></canvas>
+
+    <script>
+        function generateQR() {
+            var name = document.getElementById('name').value;
+            var phone = document.getElementById('phone').value;
+            var email = document.getElementById('email').value;
+            var address = document.getElementById('address').value;
+            var photo = document.getElementById('photo').value;
+            var org = document.getElementById('org').value;
+            var title = document.getElementById('title').value;
+            var url = document.getElementById('url').value;
+            var birthday = document.getElementById('birthday').value;
+
+            // 使用 VCard 3.0 标准
+            var vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nADR:${address}\nPHOTO;VALUE=URI:${photo}\nORG:${org}\nTITLE:${title}\nURL:${url}\nBDAY:${birthday}\nEND:VCARD`;
+
+            var qrCanvas = document.getElementById('qrcode');
+            qrCanvas.innerHTML = ''; // 清空之前的内容
+
+            if (name.trim() !== '') {
+                new QRious({
+                    element: qrCanvas,
+                    value: vCard,
+                    size: 300 // 可以根据需要调整大小
+                });
+            } else {
+                alert('姓名是必填的！');
+            }
+        }
+    </script>
+</body>
+</html>
