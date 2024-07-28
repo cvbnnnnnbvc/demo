@@ -97,9 +97,9 @@
             <input type="text" id="address">
         </div>
         <div class="form-group">
-            <label for="photo">头像 URL</label>
-            <li>若在QQ，需添加`https://`协议头，头像才能正确显示</li>
-            <li>若在微信，照片只能以链接的形式显示。添加`https://`协议头，点击链接可以跳转</li>
+            <label for="photo">照片链接</label>
+            <li>若在QQ，需添加`https://`协议头，才能正确显示为头像</li>
+            <li>若在微信，添加协议头会扫码报错</li>
             <input type="text" id="photo">
         </div>
         <div class="form-group">
@@ -111,13 +111,18 @@
             <input type="text" id="title">
         </div>
         <div class="form-group">
-            <label for="url">个人网站 URL:</label>
-            <li>添加`https://`协议头，点击链接可以跳转</li>
+            <label for="url">个人主页链接:</label>
+            <li>若在QQ，添加`https://`协议头，点击链接可以跳转</li>
+            <li>若在微信，添加协议头会扫码报错</li>
             <input type="text" id="url">
         </div>
         <div class="form-group">
             <label for="birthday">生日:</label>
             <input type="date" id="birthday">
+        </div>
+        <div class="form-group">
+            <label for="note">备注:</label>
+            <input type="text" id="note">
         </div>
         <button type="button" onclick="generateQR()">生成二维码</button>
         <button id="downloadBtn" style="display: none;" onclick="downloadQR()">下载二维码</button>
@@ -135,9 +140,10 @@
             var title = $('#title').val();
             var url = $('#url').val();
             var birthday = $('#birthday').val();
+            var note = $('#note').val();
 
             // 使用 VCard 3.0 标准
-            var vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nADR:${address}\nPHOTO;VALUE=URI:${photo}\nORG:${org}\nTITLE:${title}\nURL:${encodeURIComponent(url)}\nBDAY:${birthday}\nEND:VCARD`;
+            var vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nADR:${address}\nPHOTO;VALUE=URI:${photo}\nORG:${org}\nTITLE:${title}\nURL:${url}\nBDAY:${birthday}\nNOTE:${note}\nEND:VCARD`;
 
             var qrCanvas = document.getElementById('qrcodeCanvas');
             var downloadBtn = document.getElementById('downloadBtn');
