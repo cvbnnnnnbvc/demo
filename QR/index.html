@@ -66,6 +66,9 @@
             -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
             box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
         }
+        #downloadBtn {
+            background-color: #259c88;
+        }
     </style>
 </head>
 <body>
@@ -109,6 +112,7 @@
             <input type="date" id="birthday">
         </div>
         <button type="button" onclick="generateQR()">生成二维码</button>
+        <button id="downloadBtn" style="display: none;" onclick="downloadQR()">下载二维码</button>
     </form>
     <canvas id="qrcode"></canvas>
 
@@ -125,9 +129,11 @@
             var birthday = document.getElementById('birthday').value;
 
             // 使用 VCard 3.0 标准
-            var vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nADR:${address}\nPHOTO;VALUE=URI:${photo}\nORG:${org}\nTITLE:${title}\nURL:${url}\nBDAY:${birthday}\nEND:VCARD`;
+            var vCard = BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nADR:${address}\nPHOTO;VALUE=URI:${photo}\nORG:${org}\nTITLE:${title}\nURL:${url}\nBDAY:${birthday}\nEND:VCARD;
 
             var qrCanvas = document.getElementById('qrcode');
+            var downloadBtn = document.getElementById('downloadBtn');
+
             qrCanvas.innerHTML = ''; // 清空之前的内容
 
             if (name.trim() !== '') {
@@ -136,9 +142,25 @@
                     value: vCard,
                     size: 300 // 可以根据需要调整大小
                 });
+
+                // 显示下载按钮
+                downloadBtn.style.display = 'inline';
             } else {
                 alert('姓名是必填的！');
+
+                // 隐藏下载按钮
+                downloadBtn.style.display = 'none';
             }
+        }
+
+        function downloadQR() {
+            var qrCanvas = document.getElementById('qrcode');
+            var link = document.createElement('a');
+
+            // 获取二维码图像的 Data URL
+            link.href = qrCanvas.toDataURL('image/png');
+            link.download = 'qrcode.png'; // 设置下载文件名
+            link.click(); // 模拟点击下载
         }
     </script>
 </body>
