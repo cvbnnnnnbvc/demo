@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个人信息生成二维码</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,6 +18,7 @@
         }
         p {
             margin: 0;
+            margin-bottom: 20px;
             color: #474747;
             font-size: 23px;
         }
@@ -69,11 +71,14 @@
         #downloadBtn {
             background-color: #259c88;
         }
+        li {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
     <p>个人信息生成二维码</p>
-    <h4>中文信息扫码不能正常显示</h4>
     <form id="infoForm">
         <div class="form-group">
             <label for="name">姓名:</label>
@@ -92,7 +97,9 @@
             <input type="text" id="address">
         </div>
         <div class="form-group">
-            <label for="photo">头像 URL:</label>
+            <label for="photo">头像 URL</label>
+            <li>若在QQ，需添加`https://`协议头，头像才能正确显示</li>
+            <li>若在微信，照片只能以链接的形式显示。添加`https://`协议头，点击链接可以跳转</li>
             <input type="text" id="photo">
         </div>
         <div class="form-group">
@@ -105,6 +112,7 @@
         </div>
         <div class="form-group">
             <label for="url">个人网站 URL:</label>
+            <li>添加`https://`协议头，点击链接可以跳转</li>
             <input type="text" id="url">
         </div>
         <div class="form-group">
@@ -114,47 +122,39 @@
         <button type="button" onclick="generateQR()">生成二维码</button>
         <button id="downloadBtn" style="display: none;" onclick="downloadQR()">下载二维码</button>
     </form>
-    <canvas id="qrcode"></canvas>
+    <canvas id="qrcodeCanvas"></canvas>
 
     <script>
         function generateQR() {
-            var name = document.getElementById('name').value;
-            var phone = document.getElementById('phone').value;
-            var email = document.getElementById('email').value;
-            var address = document.getElementById('address').value;
-            var photo = document.getElementById('photo').value;
-            var org = document.getElementById('org').value;
-            var title = document.getElementById('title').value;
-            var url = document.getElementById('url').value;
-            var birthday = document.getElementById('birthday').value;
+            var name = $('#name').val();
+            var phone = $('#phone').val();
+            var email = $('#email').val();
+            var address = $('#address').val();
+            var photo = $('#photo').val();
+            var org = $('#org').val();
+            var title = $('#title').val();
+            var url = $('#url').val();
+            var birthday = $('#birthday').val();
 
             // 使用 VCard 3.0 标准
-            var vCard = BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nADR:${address}\nPHOTO;VALUE=URI:${photo}\nORG:${org}\nTITLE:${title}\nURL:${url}\nBDAY:${birthday}\nEND:VCARD;
+            var vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nADR:${address}\nPHOTO;VALUE=URI:${photo}\nORG:${org}\nTITLE:${title}\nURL:${encodeURIComponent(url)}\nBDAY:${birthday}\nEND:VCARD`;
 
-            var qrCanvas = document.getElementById('qrcode');
+            var qrCanvas = document.getElementById('qrcodeCanvas');
             var downloadBtn = document.getElementById('downloadBtn');
 
-            qrCanvas.innerHTML = ''; // 清空之前的内容
-
-            if (name.trim() !== '') {
-                new QRious({
-                    element: qrCanvas,
-                    value: vCard,
-                    size: 300 // 可以根据需要调整大小
-                });
-
-                // 显示下载按钮
-                downloadBtn.style.display = 'inline';
-            } else {
-                alert('姓名是必填的！');
-
-                // 隐藏下载按钮
-                downloadBtn.style.display = 'none';
-            }
+            QRCode.toCanvas(qrCanvas, vCard, { errorCorrectionLevel: 'H' }, function (error) {
+                if (error) {
+                    console.error(error);
+                    alert('生成二维码时出错');
+                } else {
+                    // 显示下载按钮
+                    downloadBtn.style.display = 'inline';
+                }
+            });
         }
 
         function downloadQR() {
-            var qrCanvas = document.getElementById('qrcode');
+            var qrCanvas = document.getElementById('qrcodeCanvas');
             var link = document.createElement('a');
 
             // 获取二维码图像的 Data URL
