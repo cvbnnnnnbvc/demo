@@ -124,13 +124,14 @@
             <label for="note">备注:</label>
             <input type="text" id="note">
         </div>
-        <button type="button" onclick="generateQR()">生成二维码</button>
-        <button id="downloadBtn" style="display: none;" onclick="downloadQR()">下载二维码</button>
+        <button id="generateBtn" type="button">生成二维码</button>
+        <button id="downloadBtn" type="button" style="display: none;">下载二维码</button>
     </form>
     <canvas id="qrcodeCanvas"></canvas>
 
     <script>
-        function generateQR() {
+        // 生成二维码
+        $('#generateBtn').on('click', function() {
             var name = $('#name').val();
             var phone = $('#phone').val();
             var email = $('#email').val();
@@ -157,9 +158,11 @@
                     downloadBtn.style.display = 'inline';
                 }
             });
-        }
+        });
 
-        function downloadQR() {
+        // 下载二维码
+        $('#downloadBtn').on('click', function(event) {
+            event.preventDefault(); // 防止默认行为
             var qrCanvas = document.getElementById('qrcodeCanvas');
             var link = document.createElement('a');
 
@@ -167,7 +170,7 @@
             link.href = qrCanvas.toDataURL('image/png');
             link.download = 'qrcode.png'; // 设置下载文件名
             link.click(); // 模拟点击下载
-        }
+        });
     </script>
 </body>
 </html>
