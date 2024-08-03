@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据库管理面板</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h3 {
+            text-align: center;
+            color: #444444;
+            margin-top: 20px;
+        }
+        .container {
+            width: 400px;
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        button {
+            background-color: #54bcc4;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            margin: 5px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #457fa0;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            width: calc(100% - 22px); 
+        }
+        #fruit-fields {
+            margin-bottom: 20px;
+        }
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        #confirm-add, #confirm-update, #fruit-fields {
+            display: none;
+        }
+        #confirm-add {
+            background-color: #5792c9;
+        }
+        #confirm-add:hover {
+            background-color: #2a52b8;
+        }
+        .table-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        #fruit-table {
+            width: 80%;
+            border-collapse: collapse;
+            display: table; 
+        }
+        input:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+        }
+        #message {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 20px auto;
+            width: 80%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h3>数据库管理面板</h3>
+    <div id="message"></div>
+    <div class="container">
+        <input type="text" id="fruit-id" placeholder="编号">
+        <div id="fruit-fields">
+            <input type="text" id="fruit-name" placeholder="名称">
+            <input type="text" id="fruit-category" placeholder="分类">
+        </div>
+        <button onclick="showAddFields()">添加</button>
+        <button id="confirm-add" onclick="addFruit()">确认添加</button>
+        <button onclick="deleteFruit()">删除</button>
+        <button onclick="queryFruits()">查询</button>
+    </div>
+    <div class="table-container">
+        <table id="fruit-table" style="display: none;">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>名称</th>
+                    <th>分类</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUpdateModal()">&times;</span>
+            <input type="text" id="update-name" placeholder="名称">
+            <input type="text" id="update-category" placeholder="分类">
+            <button onclick="updateFruit()">确认修改</button>
+        </div>
+    </div>
+
+    <script>
+        const url = 'https://njxogprdvnhqlbrjypcs.supabase.co/rest/v1/fruits';
+        const headers = {
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qeG9ncHJkdm5ocWxicmp5cGNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkxOTYzNTEsImV4cCI6MjAzNDc3MjM1MX0.fS0RdDGIQ-cxP0BaMowgyyVLHBkYRP6ina81YDoMBOI',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qeG9ncHJkdm5ocWxicmp5cGNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkxOTYzNTEsImV4cCI6MjAzNDc3MjM1MX0.fS0RdDGIQ-cxP0BaMowgyyVLHBkYRP6ina81YDoMBOI',
+            'Content-Type': 'application/json'
+        };
+
+        function showAddFields() {
+            document.getElementById('fruit-fields').style.display = 'block';
+            document.getElementById('confirm-add').style.display = 'inline';
+            document.getElementById('updateModal').style.display = 'none';
+        }
+
+        function showUpdateFields(id) {
+            fetch(`${url}?id=eq.${id}`, { headers })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const fruit = data[0];
+                        document.getElementById('update-name').value = fruit.name;
+                        document.getElementById('update-category').value = fruit.category;
+                        document.getElementById('updateModal').style.display = 'block';
+                    } else {
+                        showAlert('未找到编号为 ' + id);
+                    }
+                });
+        }
+
+        function closeUpdateModal() {
+            document.getElementById('updateModal').style.display = 'none';
+        }
+
+        function showAlert(message) {
+            const alertModal = document.createElement('div');
+            alertModal.className = 'modal';
+            alertModal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close" onclick="this.parentElement.parentElement.style.display='none'">&times;</span>
+                    <h2>${message}</h2>
+                </div>
+            `;
+            document.body.appendChild(alertModal);
+            alertModal.style.display = 'block';
+        }
+
+        function showMessage(message) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = message;
+            messageElement.style.display = 'block';
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 3000); // 消息显示 3 秒
+        }
+
+        function addFruit() {
+            const id = document.getElementById('fruit-id').value;
+            const name = document.getElementById('fruit-name').value;
+            const category = document.getElementById('fruit-category').value;
+
+            if (!id || !name || !category) {
+                alert('请填写所有字段');
+                return;
+            }
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    ...headers,
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify({ id, name, category })
+            })
+            .then(response => response.json())
+            .then(data => {
+                showMessage('添加成功');
+                queryFruits(); // 刷新数据表
+                document.getElementById('fruit-id').value = '';
+                document.getElementById('fruit-name').value = '';
+                document.getElementById('fruit-category').value = '';
+                document.getElementById('fruit-fields').style.display = 'none';
+                document.getElementById('confirm-add').style.display = 'none';
+            });
+        }
+
+        function deleteFruit() {
+            const id = document.getElementById('fruit-id').value;
+            if (!id) {
+                alert('请输入编号');
+                return;
+            }
+
+            fetch(`${url}?id=eq.${id}`, {
+                method: 'DELETE',
+                headers
+            })
+            .then(response => {
+                if (response.ok) {
+                    showMessage('删除成功');
+                    queryFruits(); // 刷新数据表
+                    document.getElementById('fruit-id').value = '';
+                } else {
+                    showMessage('删除失败');
+                }
+            });
+        }
+
+        function queryFruits() {
+        const id = document.getElementById('fruit-id').value;
+        
+        if (!id) {
+            showMessage('请输入编号进行查询');
+            return;
+        }
+
+        let queryUrl = url;
+
+        if (id) {
+            queryUrl += `?id=eq.${id}`;
+        }
+
+        fetch(queryUrl, { headers })
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#fruit-table tbody');
+                tableBody.innerHTML = '';
+
+                if (data.length === 0) {
+                    document.getElementById('fruit-table').style.display = 'none';
+                    showMessage('无数据');
+                    return;
+                }
+
+                data.forEach(fruit => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${fruit.id}</td>
+                        <td>${fruit.name}</td>
+                        <td>${fruit.category}</td>
+                        <td><button onclick="showUpdateFields('${fruit.id}')">修改</button></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                document.getElementById('fruit-table').style.display = 'table';
+            })
+            .catch(error => showMessage('查询失败'));
+    }
+
+        function updateFruit() {
+            const id = document.getElementById('fruit-id').value;
+            const name = document.getElementById('update-name').value;
+            const category = document.getElementById('update-category').value;
+
+            if (!id || !name || !category) {
+                alert('请填写所有字段');
+                return;
+            }
+
+            fetch(`${url}?id=eq.${id}`, {
+                method: 'PATCH',
+                headers,
+                body: JSON.stringify({ name, category })
+            })
+            .then(response => response.json())
+
+                showMessage('信息更新成功');
+                queryFruits(); // 刷新数据表
+                document.getElementById('updateModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
