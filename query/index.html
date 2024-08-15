@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QQ号查绑</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eeeeee;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 4px 4px 8px rgba(0, 123, 255, 0.7);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .input-group input:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+        }
+        .input-group button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .input-group button:hover {
+            background: #0056b3;
+        }
+        .data-container {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: none; 
+        }
+        .data-container.show {
+            display: block; 
+        }
+        .data-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .data-item:last-child {
+            border-bottom: none;
+        }
+        .data-item label {
+            font-weight: bold;
+            color: #333;
+        }
+        .data-item span {
+            color: #555;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QQ号查绑</h1>
+        <div class="input-group">
+            <input type="text" id="qq-input" placeholder="请输入 QQ 号">
+            <button id="fetch-button">查询</button>
+        </div>
+        <div class="data-container" id="data-container">
+            <!-- JSON 数据将显示在这里 -->
+        </div>
+    </div>
+    <script>
+        // 字段名映射
+        const fieldMapping = {
+            "status": "状态",
+            "message": "信息",
+            "qq": "QQ 号",
+            "phone": "手机号",
+            "phonediqu": "归属地"
+        };
+
+        // 获取输入框、按钮和数据容器
+        const qqInput = document.getElementById('qq-input');
+        const fetchButton = document.getElementById('fetch-button');
+        const container = document.getElementById('data-container');
+
+        // 按钮点击事件处理
+        fetchButton.addEventListener('click', () => {
+            // 获取用户输入的 QQ 号
+            const qq = qqInput.value.trim();
+            
+            if (!qq) {
+                alert('请输入 QQ 号');
+                return;
+            }
+            
+            // 清空之前的数据
+            container.innerHTML = '';
+            container.classList.remove('show'); // 隐藏数据容器
+
+            // API URL
+            const apiUrl = `https://api.xywlapi.cc/qqapi?qq=${qq}`;
+
+            // 从 API 获取数据并显示
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // 遍历 JSON 数据并生成 HTML
+                    for (const [key, value] of Object.entries(data)) {
+                        const div = document.createElement('div');
+                        div.classList.add('data-item');
+                        const label = fieldMapping[key] || key; // 使用映射的字段名或原字段名
+                        div.innerHTML = `<label>${label}:</label> <span>${value}</span>`;
+                        container.appendChild(div);
+                    }
+                    container.classList.add('show'); // 显示数据容器
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    container.innerHTML = '<p class="error-message">无法获取数据</p>';
+                    container.classList.add('show'); // 显示数据容器，即使发生错误
+                });
+        });
+    </script>
+</body>
+</html>
