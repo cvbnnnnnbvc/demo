@@ -24,12 +24,10 @@
             max-width: 600px;
             width: 100%;
         }
-
         h1 {
             text-align: center;
             color: #454545;
         }
-
         input[type="text"] {
             width: calc(100% - 120px);
             max-width: 600px;
@@ -39,7 +37,6 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         button {
             padding: 10px 15px;
             background-color: #4f74d9;
@@ -51,7 +48,7 @@
     </style>
 </head>
 <body>
-    <h1>网址跳转-cookie记忆</h1>
+    <h1>网址跳转 - cookie记忆</h1>
     <div class="box">
         <input type="text" id="urlInput" placeholder="输入要记忆的跳转网址">
         <button onclick="saveUrl()">记忆网址</button>
@@ -70,7 +67,9 @@
         function saveUrl() {
             var url = document.getElementById("urlInput").value;
             url = formatUrl(url); // 格式化网址
-            document.cookie = "savedUrl=" + encodeURIComponent(url) + "; path=/"; // 设置 cookie
+            var expires = new Date();
+            expires.setFullYear(expires.getFullYear() + 10); // 有效期为10年
+            document.cookie = "savedUrl=" + encodeURIComponent(url) + "; path=/; expires=" + expires.toUTCString(); // 设置 cookie
             window.location.href = url; // 跳转到输入的网址
         }
 
