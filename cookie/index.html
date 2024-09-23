@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网址跳转-cookie记忆</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        input:focus {
+            border-color: #66afe9;
+            outline: 0;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+        }
+        .box {
+            margin: 0 auto; 
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #454545;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 120px);
+            max-width: 600px;
+            padding: 10px;
+            margin-right: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #4f74d9;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>网址跳转-cookie记忆</h1>
+    <div class="box">
+        <input type="text" id="urlInput" placeholder="输入网址">
+        <button onclick="saveUrl()">保存网址</button>
+    </div>
+
+    <script>
+        // 页面加载时检查并跳转到已保存的网址
+        window.onload = function() {
+            var savedUrl = getSavedUrl();
+            if (savedUrl) {
+                window.location.href = savedUrl; // 跳转到保存的网址
+            }
+        };
+
+        // 保存网址到 cookie
+        function saveUrl() {
+            var url = document.getElementById("urlInput").value;
+            url = formatUrl(url); // 格式化网址
+            document.cookie = "savedUrl=" + encodeURIComponent(url) + "; path=/"; // 设置 cookie
+            window.location.href = url; // 跳转到输入的网址
+        }
+
+        // 格式化网址，添加 http://
+        function formatUrl(url) {
+            if (!/^http[s]?:\/\//i.test(url)) {
+                url = 'https://' + url;
+            }
+            return url;
+        }
+
+        // 获取保存的网址
+        function getSavedUrl() {
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].split("=");
+                if (cookie[0] === "savedUrl") {
+                    return decodeURIComponent(cookie[1]);
+                }
+            }
+            return null;
+        }
+    </script>
+</body>
+</html>
