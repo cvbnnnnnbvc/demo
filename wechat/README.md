@@ -6,10 +6,10 @@
 |       |            |
 |------------|---------------------|
 | 浏览器     | Microsoft Edge         |
-| 插件   | [点击下载 chrome.zip](https://fuck-qq.net/wechat/chrome.zip "下载：https://fuck-qq.net/wechat/chrome.zip")       |
+| 插件   | [点击下载 wechat-web-login.zip](https://fuck-qq.net/wechat/wechat-web-login.zip "下载：https://fuck-qq.net/wechat/wechat-web-login.zip")       |
 
 
-登录教程：下载的插件（chrome.zip）适用于Microsoft Edge浏览器，解压下载好的 ZIP。然后打开Edge浏览器，按下 Alt + F 打开菜单，选择 “扩展”，选择 “管理扩展”，开启 “开发人员模式”，再点击 “加载解压缩的扩展”，选择刚才解压好的文件目录：wechat_login，可以看到下方来自其他源的 wechat-need-web 1.1.1 已开启。然后在Edge浏览器打开：[https://wx2.qq.com/?target=t](https://wx2.qq.com/?target=t "跳转到：https://wx2.qq.com/?target=t")，完成微信网页版的登录。
+登录教程：下载的插件（wechat-web-login.zip）适用于Microsoft Edge浏览器，解压下载好的 ZIP。然后打开Edge浏览器，按下 Alt + F 打开菜单，选择 “扩展”，选择 “管理扩展”，开启 “开发人员模式”，再点击 “加载解压缩的扩展”，选择刚才解压好的文件目录：wechat_login，可以看到下方来自其他源的 wechat-need-web 1.1.1 已开启。然后在Edge浏览器打开：[https://wx2.qq.com/?target=t](https://wx2.qq.com/?target=t "跳转到：https://wx2.qq.com/?target=t")，完成微信网页版的登录。
 
 
 > ## *安装聊天插件*
