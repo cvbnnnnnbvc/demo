@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信加密聊天教程</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .markdown-body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 90%;
+        }
+        pre code {
+            display: block;
+            padding: 10px;
+            background: #f4f4f4;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        blockquote {
+            border-left: 4px solid #ccc;
+            padding-left: 20px;
+            margin: 0;
+            color: #555;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="markdown-body" id="markdown-content">
+        <!-- Markdown 内容会插入在这里 -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+    <script>
+        // 从 URL 参数中获取 Markdown 文件路径
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // 初始化 Markdown-it
+        const md = window.markdownit();
+
+        // 获取 Markdown 文件路径
+        const mdFilePath = getQueryParam('md') || 'README.md'; // 默认到 'README.md'
+
+        // 加载 Markdown 文件并渲染
+        fetch(mdFilePath)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应不是 ok');
+                }
+                return response.text();
+            })
+            .then(markdownContent => {
+                // 渲染 Markdown 内容
+                document.getElementById('markdown-content').innerHTML = md.render(markdownContent);
+            })
+            .catch(error => {
+                console.error('加载 Markdown 文件失败:', error);
+                document.getElementById('markdown-content').innerHTML = '<p>加载 Markdown 文件失败。</p>';
+            });
+    </script>
+</body>
+</html>
