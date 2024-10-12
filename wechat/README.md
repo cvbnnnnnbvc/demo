@@ -19,7 +19,7 @@
 |    |       | 
 |--------------|------------------------|
 | 浏览器          | Microsoft Edge              | 
-| 插件          | [点击下载 篡改猴](https://microsoftedge.microsoft.com/addons/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/iikmkjmpaadaobahmlepeloendndfphd "跳转到：https://microsoftedge.microsoft.com/addons/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/iikmkjmpaadaobahmlepeloendndfphd")            | 
+| 插件          | [点击安装 篡改猴](https://microsoftedge.microsoft.com/addons/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/iikmkjmpaadaobahmlepeloendndfphd "跳转到：https://microsoftedge.microsoft.com/addons/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/iikmkjmpaadaobahmlepeloendndfphd")            | 
 
 点击 “获取”，点击 “添加扩展”，等待安装完毕。可以选择篡改猴在工具栏中显示，方便后续操作。
 
@@ -28,7 +28,7 @@
 |    |       | 
 |--------------|------------------------|
 | 浏览器          | Microsoft Edge              | 
-| 插件          | [点击下载「微信加密消息处理」脚本](https://greasyfork.org/zh-CN/scripts/512321-%E5%BE%AE%E4%BF%A1%E5%8A%A0%E5%AF%86%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86/code "跳转到：https://greasyfork.org/zh-CN/scripts/512321-%E5%BE%AE%E4%BF%A1%E5%8A%A0%E5%AF%86%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86/code")            | 
+| 插件          | [点击安装「微信加密消息处理」脚本](https://greasyfork.org/zh-CN/scripts/512321-%E5%BE%AE%E4%BF%A1%E5%8A%A0%E5%AF%86%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86/code "跳转到：https://greasyfork.org/zh-CN/scripts/512321-%E5%BE%AE%E4%BF%A1%E5%8A%A0%E5%AF%86%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86/code")            | 
 
 点击 “安装此脚本”，点击 “安装”。
 
