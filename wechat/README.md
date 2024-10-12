@@ -28,7 +28,7 @@
 |    |       | 
 |--------------|------------------------|
 | 浏览器          | Microsoft Edge              | 
-| 插件          | [点击下载「微信加密消息处理」脚本](https://greasyfork.org/zh-CN/scripts/512321-%E5%BE%AE%E4%BF%A1%E5%8A%A0%E5%AF%86%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86 "跳转到：https://greasyfork.org/zh-CN/scripts/512321-%E5%BE%AE%E4%BF%A1%E5%8A%A0%E5%AF%86%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86")            | 
+| 插件          | [点击下载「微信加密消息处理」脚本](https://greasyfork.org/zh-CN/scripts/512321-%E5%BE%AE%E4%BF%A1%E5%8A%A0%E5%AF%86%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86/code "跳转到：https://greasyfork.org/zh-CN/scripts/512321-%E5%BE%AE%E4%BF%A1%E5%8A%A0%E5%AF%86%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86/code")            | 
 
 点击 “安装此脚本”，点击 “安装”。
 
