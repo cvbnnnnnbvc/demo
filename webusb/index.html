@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebUSB</title>
+    <script src="js/hterm_all.js"></script>
+    <script src="js/serial.js"></script>
+    <script src="js/console.js"></script>
+    <style>
+       body {
+        background-color: #f0f0f0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    button {
+    background: linear-gradient(45deg, #007bff, #0056b3); /* 渐变背景 */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 25px; /* 圆角 */
+    transition: all 0.3s ease; /* 平滑过渡效果 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 阴影 */
+}
+
+button:hover {
+    background: linear-gradient(45deg, #0056b3, #007bff); /* 鼠标悬停时的渐变 */
+    transform: translateY(-2px); /* 悬停时轻微上升 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 悬停时的阴影效果 */
+}
+
+#terminal {
+    min-width: 95%; 
+    max-width: 95%; 
+    min-height: 70%;
+    margin: 0 auto; /* 水平居中 */
+    position: relative;
+    
+}
+
+
+    </style>
+</head>
+<body>
+    <p>
+        <button id="connect">连接 UKey</button>
+    </p>
+    <div id="terminal"></div>
+</body>
+</html>
