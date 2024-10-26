@@ -2,34 +2,22 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>粘贴板</title>
+    <title>获取粘贴板内容</title>
 </head>
 <body>
-    <script>
-        // 页面加载时自动将文本写入剪贴板
-        window.onload = function() {
-            const textToCopy = "我爱你，小敏！";
+    <h1>获取剪贴板内容</h1>
+    <button onclick="getClipboardContent()">点击获取剪贴板内容</button>
+    <p id="clipboardContent">剪贴板内容将显示在这里</p>
 
-            // 检查是否支持 navigator.clipboard API
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(textToCopy).catch(() => {
-                    // 捕获错误但不显示任何提示
-                });
-            } else {
-                // 使用退回方法兼容旧版浏览器
-                const tempInput = document.createElement("textarea");
-                tempInput.value = textToCopy;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                tempInput.setSelectionRange(0, tempInput.value.length); // 选择文本
-                try {
-                    document.execCommand("copy");
-                } catch (err) {
-                    console.error("复制失败:", err);
-                }
-                document.body.removeChild(tempInput);
+    <script>
+        async function getClipboardContent() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById("clipboardContent").innerText = "剪贴板内容：" + text;
+            } catch (err) {
+                document.getElementById("clipboardContent").innerText = "无法获取剪贴板内容：" + err;
             }
-        };
+        }
     </script>
 </body>
 </html>
