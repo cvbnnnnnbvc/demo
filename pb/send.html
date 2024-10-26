@@ -2,16 +2,33 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>自动写入剪贴板</title>
+    <title>粘贴板</title>
 </head>
 <body>
     <script>
-        // 页面加载完成时自动将文本写入剪贴板
+        // 页面加载时自动将文本写入剪贴板
         window.onload = function() {
             const textToCopy = "我爱你，小敏！";
-            navigator.clipboard.writeText(textToCopy).catch(() => {
-                // 捕获错误但不显示任何提示
-            });
+
+            // 检查是否支持 navigator.clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy).catch(() => {
+                    // 捕获错误但不显示任何提示
+                });
+            } else {
+                // 使用退回方法兼容旧版浏览器
+                const tempInput = document.createElement("textarea");
+                tempInput.value = textToCopy;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                tempInput.setSelectionRange(0, tempInput.value.length); // 选择文本
+                try {
+                    document.execCommand("copy");
+                } catch (err) {
+                    console.error("复制失败:", err);
+                }
+                document.body.removeChild(tempInput);
+            }
         };
     </script>
 </body>
