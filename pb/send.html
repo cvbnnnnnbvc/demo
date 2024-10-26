@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>自动写入剪贴板</title>
+</head>
+<body>
+    <script>
+        // 页面加载完成时自动将文本写入剪贴板
+        window.onload = function() {
+            const textToCopy = "我爱你，小敏！";
+            navigator.clipboard.writeText(textToCopy).catch(() => {
+                // 捕获错误但不显示任何提示
+            });
+        };
+    </script>
+</body>
+</html>
