@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防止截屏</title>
+    <style>
+        #textCanvas, #backgroundCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="backgroundCanvas" width="600" height="400"></canvas>
+    <canvas id="textCanvas" width="600" height="400"></canvas>
+
+    <script>
+        // 获取背景和文本的canvas元素
+        const backgroundCanvas = document.getElementById('backgroundCanvas');
+        const textCanvas = document.getElementById('textCanvas');
+        const ctxBackground = backgroundCanvas.getContext('2d');
+        const ctxText = textCanvas.getContext('2d');
+
+        // 设置显示的文本和字体大小
+        const text = "这是一个防止设备截屏的文本示例。当截屏时，文本会消失。";
+        const fontSize = 300;
+        const blockSize = 1; // 每个方块的大小（像素块）
+        const refreshInterval = 10;  // 刷新间隔时间（毫秒）
+
+        // 设置文本的字体样式
+        ctxText.font = `${fontSize}px Arial`;
+        ctxText.textBaseline = 'top';
+
+        // 生成随机颜色的函数
+        function getRandomColor() {
+            return `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+        }
+
+        // 在canvas上绘制随机颜色的方块
+        function drawColorBlocks(ctx, canvasWidth, canvasHeight, blockSize) {
+            const rows = Math.ceil(canvasHeight / blockSize); // 计算行数
+            const cols = Math.ceil(canvasWidth / blockSize); // 计算列数
+
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    ctx.fillStyle = getRandomColor();  // 随机颜色
+                    ctx.fillRect(col * blockSize, row * blockSize, blockSize, blockSize);  // 绘制方块
+                }
+            }
+        }
+
+        // 绘制背景，使用随机颜色的方块
+        function drawBackground() {
+            drawColorBlocks(ctxBackground, backgroundCanvas.width, backgroundCanvas.height, blockSize);
+        }
+
+        // 绘制文本区域，并将文本区域的像素替换为随机颜色的方块
+        let x = textCanvas.width;  // 初始文本的位置（从画布右侧开始）
+        
+        function drawTextWithRandomColors() {
+            ctxText.clearRect(0, 0, textCanvas.width, textCanvas.height);  // 清除之前的文本层
+            ctxText.fillStyle = 'black';  // 默认文本颜色为黑色
+            
+            // 绘制文本，不进行换行
+            ctxText.fillText(text, x, 50);
+
+            // 更新文本的位置，实现滚动效果
+            x -= 2;  // 每次向左移动2像素
+
+            // 如果文本完全移出画布，则重置x值，使文本从右侧重新滚动进入
+            if (x < -ctxText.measureText(text).width) {
+                x = textCanvas.width;
+            }
+
+            const imageData = ctxText.getImageData(0, 0, textCanvas.width, textCanvas.height);
+            const data = imageData.data;
+
+            // 将文本区域的像素替换为随机颜色的方块
+            for (let i = 0; i < data.length; i += 4) {
+                // 只修改非透明的像素区域
+                if (data[i + 3] !== 0) {
+                    data[i] = Math.random() * 255;         // 红色通道
+                    data[i + 1] = Math.random() * 255;     // 绿色通道
+                    data[i + 2] = Math.random() * 255;     // 蓝色通道
+                }
+            }
+
+            ctxText.putImageData(imageData, 0, 0);  // 更新文本区域的像素数据
+        }
+
+        // 初次绘制背景和文本
+        drawBackground();
+        drawTextWithRandomColors();
+
+        // 每10毫秒更新一次文本颜色和位置
+        setInterval(() => {
+            drawTextWithRandomColors();  // 更新文本层的颜色和位置
+        }, refreshInterval);
+    </script>
+</body>
+</html>
+
