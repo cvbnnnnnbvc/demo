@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAuthn 指纹注册示例</title>
+</head>
+<body>
+    <h2>WebAuthn 指纹注册和登录</h2>
+    <button onclick="registerFingerprint()">注册指纹</button>
+    <button onclick="verifyFingerprint()">登录</button>
+    <p id="status"></p>
+
+    <script>
+        let storedCredential = null; // 模拟存储凭据
+
+        async function registerFingerprint() {
+            if (!window.PublicKeyCredential) {
+                alert("你的浏览器不支持 WebAuthn!");
+                return;
+            }
+
+            const publicKey = {
+                challenge: new Uint8Array(32), // 服务器应生成的随机挑战
+                rp: { name: "示例网站" },
+                user: {
+                    id: new Uint8Array(16),
+                    name: "user@example.com",
+                    displayName: "用户"
+                },
+                pubKeyCredParams: [{ type: "public-key", alg: -7 }], // ES256
+                authenticatorSelection: { authenticatorAttachment: "platform" },
+                timeout: 60000
+            };
+
+            try {
+                const credential = await navigator.credentials.create({ publicKey });
+                storedCredential = credential; // 存储在本地（模拟服务器存储）
+                document.getElementById("status").innerText = "注册成功！";
+                console.log("注册成功:", credential);
+            } catch (error) {
+                console.error("注册失败:", error);
+                document.getElementById("status").innerText = "注册失败！";
+            }
+        }
+
+        async function verifyFingerprint() {
+            if (!storedCredential) {
+                alert("请先注册指纹！");
+                return;
+            }
+
+            const publicKey = {
+                challenge: new Uint8Array(32)
+            };
+
+            try {
+                const credential = await navigator.credentials.get({ publicKey });
+                console.log("身份验证成功:", credential);
+                document.getElementById("status").innerText = "登录成功！";
+            } catch (error) {
+                console.error("身份验证失败:", error);
+                document.getElementById("status").innerText = "登录失败！";
+            }
+        }
+    </script>
+</body>
+</html>
